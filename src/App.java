@@ -1,6 +1,4 @@
 import java.util.*;
-import java.util.Map.Entry;
-
 
 public class App {
 
@@ -17,7 +15,6 @@ public class App {
         Scanner sc = new Scanner(System.in);
         int opcion;
         crear_posiciones();
-        
 
         do{
             System.out.println();
@@ -27,16 +24,13 @@ public class App {
             switch (opcion) {
                 case 0 -> System.out.println("Gracias por haber utilizado el programa.!!");
                 case 1 -> registrar_usuario(sc);
+                case 2 -> listar_jugadores();
                 default -> System.out.println("Opcion invalida !!");
             }
 
         }while(opcion != 0);
-        
-        
-        System.out.println(posiciones);
-
+        //System.out.println(posiciones);
         sc.close();
-
             }
 
     public static void mostrar_menu(){
@@ -48,8 +42,6 @@ public class App {
         System.out.printf("|%-40s|\n"," 2. Listar jugadores registrados.");
         System.out.printf("|%-40s|\n"," 0. Salir del programa.");
         System.out.println(AMARILLO + "|" + "-".repeat(40) + "|" + AMARILLO);
-
-
     }
     public static void crear_posiciones(){
         posiciones = new TreeMap<>(Comparator.reverseOrder());
@@ -66,16 +58,30 @@ public class App {
             System.out.println("No se pueden registrar mas posiciones.");
             return;
         }
-        System.out.print("Posiciones disponibles: ");
         System.out.println(posiciones_disponibles().toString());
         int posicion = validar_posicion(sc);
         String[] jugador = obtener_datos_jugador(sc);
+        System.out.println("jugador nombre: " + jugador[1]);
         guardar_jugador(jugador, posicion);
         
-
-        
     }
-    
+
+    public static void listar_jugadores(){
+        System.out.printf("|%s|\n","-".repeat(52));
+        System.out.printf("|  %-13s|  %-15s |  %-15s|\n","Posicion","Nombre","Apellido");
+        System.out.printf("|%s|\n","-".repeat(52));
+
+        for(Map.Entry<Integer,List<String[]>> dato : posiciones.entrySet()){
+            if(dato.getValue().size() != 0){
+                for(String[] jugador : dato.getValue()){
+                    System.out.printf("%-3s%-13d%-3s%-16s%-3s%-15s|\n","|",dato.getKey(),"|",jugador[0],"|",jugador[1]);
+                    System.out.printf("|%s|\n","-".repeat(52));
+                }
+                
+            }
+        }
+
+    }
 
     public static void guardar_jugador(String[] jugador, int posicion){
         List<String[]> jugadores = posiciones.get(posicion);
@@ -110,6 +116,8 @@ public class App {
                     System.out.println("Esta posicion ya tiene 2 jugadores asignados.");
                 }
             }
+            System.out.println("Posicion invalida.");
+
         }
     }
     public static List<String> posiciones_disponibles(){
@@ -137,7 +145,6 @@ public class App {
             }
         }
         return false;
-
     }
 
     public static String[] obtener_datos_jugador(Scanner sc){
@@ -155,14 +162,7 @@ public class App {
         origen = sc.nextLine().strip();
         String[] jugador = {nombre, apellido, origen};
         return jugador;
-
     }
-
-    
-
-    
-
-    
     }
 
 
