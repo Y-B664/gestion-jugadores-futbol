@@ -1,27 +1,169 @@
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
+import java.util.Map.Entry;
 
 
 public class App {
+
+    static final int MAX_JUGADORES = 2;
+    static final int NUMERO_POSICIONES = 11;
+    static Map<Integer,List<String[]>> posiciones;
+    //ansi codes
+    static final String AMARILLO = "\u001B[33m";
+    static final String RESET = "\u001B[0m";
+    
+
     public static void main(String[] args) throws Exception {
 
-                List<List<String>> test = new ArrayList<>();
-                List<String> jugador = new ArrayList<>();
+        Scanner sc = new Scanner(System.in);
+        int opcion;
+        crear_posiciones();
+        
 
-                jugador.add("Carlos");
-                jugador.add("Bautista");
-                jugador.add("Cartagena");
-                System.out.println(jugador.get(1));
-                test.add(jugador);
-                System.out.println(test.get(0).get(0));
-
-                
+        do{
+            System.out.println();
+            mostrar_menu();
+            System.out.print(RESET);
+            opcion = validar_entrada_numerica(sc, "Por favor ingrese la opcion: ");
+            switch (opcion) {
+                case 0 -> System.out.println("Gracias por haber utilizado el programa.!!");
+                case 1 -> registrar_usuario(sc);
+                default -> System.out.println("Opcion invalida !!");
             }
-            
+
+        }while(opcion != 0);
+        
+        
+        System.out.println(posiciones);
+
+        sc.close();
+
+            }
+
+    public static void mostrar_menu(){
+        System.out.println(AMARILLO + "|" + "-".repeat(40) + "|" + AMARILLO);
+        System.out.println("\u001B[0m" + "| APP PARA GESTIONAR JUGADORES DE FUTBOL |" + "\u001B[0m");
+        System.out.println(AMARILLO + "|" + "-".repeat(40) + "|" + AMARILLO);
+        System.out.print(RESET);
+        System.out.printf("|%-40s|\n"," 1. Registrar jugador.");
+        System.out.printf("|%-40s|\n"," 2. Listar jugadores registrados.");
+        System.out.printf("|%-40s|\n"," 0. Salir del programa.");
+        System.out.println(AMARILLO + "|" + "-".repeat(40) + "|" + AMARILLO);
+
+
+    }
+    public static void crear_posiciones(){
+        posiciones = new TreeMap<>(Comparator.reverseOrder());
+
+        for(int i = 1;i<12;i++){
+            List<String[]> jugadores = new ArrayList<>();
+            posiciones.put(i, jugadores);
         }
+        System.out.println("Done");
+    } 
+
+    public static void registrar_usuario(Scanner sc){
+        if(posiciones_disponibles()==null){
+            System.out.println("No se pueden registrar mas posiciones.");
+            return;
+        }
+        System.out.print("Posiciones disponibles: ");
+        System.out.println(posiciones_disponibles().toString());
+        int posicion = validar_posicion(sc);
+        String[] jugador = obtener_datos_jugador(sc);
+        guardar_jugador(jugador, posicion);
+        
+
+        
+    }
+    
+
+    public static void guardar_jugador(String[] jugador, int posicion){
+        List<String[]> jugadores = posiciones.get(posicion);
+        jugadores.add(jugador);
+        posiciones.put(posicion, jugadores);
+        System.out.printf("El jugador %s, ha sido registrado correctamente en la posicion %d.\n",jugador[0],posicion);
+        System.out.println();
+    }
+    
+    public static int validar_entrada_numerica(Scanner sc, String mensaje){
+        int entrada;
+        while(true){
+            System.out.print(mensaje);
+            if(sc.hasNextInt() ){
+                entrada = sc.nextInt();
+                sc.nextLine();
+                return entrada;
+            }
+            sc.nextLine();
+            System.out.println("El valor ingresado no es un numero;");
+        }
+    }
+
+    public static int validar_posicion(Scanner sc){
+        int posicion;
+        while(true){
+            posicion = validar_entrada_numerica(sc, "Por favor ingrese la posicion: ");
+            if( posicion>=1 && posicion <= NUMERO_POSICIONES){
+                if(posicion_disponible(posicion)){
+                 return posicion;
+                }else{
+                    System.out.println("Esta posicion ya tiene 2 jugadores asignados.");
+                }
+            }
+        }
+    }
+    public static List<String> posiciones_disponibles(){
+        List<String> posicionesDisponibles = new ArrayList<>();
+        for(Map.Entry<Integer, List<String[]>> dato : posiciones.entrySet()){
+            if(dato.getValue()==null  || dato.getValue().size() != MAX_JUGADORES  ){
+                posicionesDisponibles.add(dato.getKey().toString());
+
+            }
+        }
+        if(posicionesDisponibles.size() == 0){
+            return null;
+        }
+        System.out.println("Posiciones disponibles " + posicionesDisponibles.size());
+
+        return posicionesDisponibles;
+    }
+
+    public static boolean posicion_disponible(int posicion){
+        for(Map.Entry<Integer, List<String[]>> dato : posiciones.entrySet()){
+            if(dato.getValue().size() != MAX_JUGADORES){
+                if(dato.getKey() == posicion){
+                    return true;
+                }
+            }
+        }
+        return false;
+
+    }
+
+    public static String[] obtener_datos_jugador(Scanner sc){
+
+        String nombre;
+        String apellido;
+        String origen;
+
+        System.out.println("Por favor Ingresar:");
+        System.out.print("Nombre: ");
+        nombre = sc.nextLine().strip();
+        System.out.print("Apellido: ");
+        apellido = sc.nextLine().strip();
+        System.out.print("Ciudad de origen: ");
+        origen = sc.nextLine().strip();
+        String[] jugador = {nombre, apellido, origen};
+        return jugador;
+
+    }
+
+    
+
+    
+
+    
+    }
+
 
 
