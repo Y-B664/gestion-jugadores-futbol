@@ -6,6 +6,10 @@ public class App {
     static final int NUMERO_POSICIONES = 11;
     static Map<Integer,List<String[]>> posiciones;
     //ansi codes
+    //SGR
+    //\033[PARAMETROSm
+    //\033[efecto;efectomtexto
+    //\033[0m -- cierre
     static final String AMARILLO = "\u001B[33m";
     static final String RESET = "\u001B[0m";
     
