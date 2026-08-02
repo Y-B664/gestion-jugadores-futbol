@@ -83,11 +83,11 @@ public class App {
         }
         int numeroPosicionesDisponibles = posicionesDisponibles.size();
         String StringPosicionesDisponibles = posicionesDisponibles.toString();
-        int espacioTitulo = 6+StringPosicionesDisponibles.length()/2;
+        int espacioTitulo = 5+StringPosicionesDisponibles.length()/2;
 
         System.out.println();
         System.out.printf(AMARILLO_FONDO + AGUAMARINA_FUENTE +LINEA_VERTICAL+"%s%s%s"+LINEA_VERTICAL+ CERRAR+"\n"," ".repeat(espacioTitulo),"REGISTRAR AL JUGADOR"," ".repeat(espacioTitulo));
-        System.out.printf(AZUL_FUENTE+" Hay %d posiciones disponibles: " + CERRAR , numeroPosicionesDisponibles);
+        System.out.printf(AZUL_FUENTE+"Hay %d posiciones disponibles: " + CERRAR , numeroPosicionesDisponibles);
         System.out.println(NEGRILLA+ StringPosicionesDisponibles + CERRAR);
         System.out.println();
         int posicion = validar_posicion(sc);
